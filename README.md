@@ -2,7 +2,7 @@
 
 A React component for rendering a 'npm install <package name>' code block. Supports multiple package managers and variations of install commands. Totally customizable. Drop it into an MDX file, a Shadcn component, a Tailwind codebase, use our built in styles or even go unstyled. You choose.
 
-Visit the [Storybook](https://timmikeladze.github.io/react-install-command/) for examples and documentation.
+Visit the [Storybook](https://react-install-command.vercel.app/) for examples and documentation.
 
 ![React Command Block Demo](./docs/readme.png)
 
@@ -22,6 +22,8 @@ Visit the [Storybook](https://timmikeladze.github.io/react-install-command/) for
 ```bash
 npm install react-install-command
 ```
+
+> 👋 Hello there! Follow me [@linesofcode](https://twitter.com/linesofcode) or visit [linesofcode.dev](https://linesofcode.dev) for more cool projects like this one.
 
 ## Usage
 
