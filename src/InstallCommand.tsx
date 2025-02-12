@@ -1,3 +1,5 @@
+"use client";
+
 import { Icon } from "@iconify/react";
 import { useCallback, useEffect, useState } from "react";
 import type { ReactNode } from "react";

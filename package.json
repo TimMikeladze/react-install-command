@@ -60,7 +60,7 @@
 			"require": "./dist/index.js",
 			"import": "./dist/index.mjs"
 		},
-		"./styles": "./dist/styles.css"
+		"./styles.css": "./dist/styles.css"
 	},
 	"files": ["dist"],
 	"config": {

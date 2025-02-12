@@ -27,14 +27,40 @@ const getPackageName = async () => {
 		return "package-name";
 	}
 };
-
 const _addUseStatement = async (
-	basePath: string,
+	pathOrFile: string,
 	type: "server" | "client",
+	isFile?: boolean,
 ) => {
-	const fullPath = path.join(__dirname, basePath);
-	const files = fs.readdirSync(fullPath);
+	const fullPath = path.join(__dirname, pathOrFile);
 
+	// Use provided isFile parameter if available, otherwise detect from extension
+	const shouldHandleAsFile =
+		isFile ?? (fullPath.endsWith(".js") || fullPath.endsWith(".mjs"));
+
+	if (shouldHandleAsFile) {
+		// Try both .js and .mjs if no extension is provided
+		const possiblePaths =
+			fullPath.endsWith(".js") || fullPath.endsWith(".mjs")
+				? [fullPath]
+				: [`${fullPath}.js`, `${fullPath}.mjs`];
+
+		for (const filePath of possiblePaths) {
+			if (fs.existsSync(filePath)) {
+				let content = await readFile(filePath, "utf-8");
+				content = `"use ${type}";\n${content}`;
+				fs.writeFileSync(filePath, content, "utf-8");
+			}
+		}
+		return;
+	}
+
+	// Handle directory case
+	if (!fs.existsSync(fullPath)) {
+		throw new Error(`Directory not found: ${fullPath}`);
+	}
+
+	const files = fs.readdirSync(fullPath);
 	for (const file of files) {
 		if (file.endsWith(".js") || file.endsWith(".mjs")) {
 			const filePath = path.join(fullPath, file);
@@ -68,7 +94,7 @@ const linkSelf = async () => {
 export default defineConfig({
 	async onSuccess() {
 		// If you want need to add a use statement to files, you can use the following code:
-		// await _addUseStatement('dist/react', 'client');
+		await _addUseStatement("dist/index", "client", true);
 
 		await linkSelf();
 	},
