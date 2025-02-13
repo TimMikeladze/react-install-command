@@ -42,7 +42,7 @@ const config: StorybookConfig = {
 				: ""
 		}
 	<meta name="title" content="react-install-command" />
-	<meta name="description" content="A React component for rendering a 'npm install <package name>' command block. Supports multiple package managers and themes. Drop it into your MDX code, a ShadCN UI component, a Tailwind codebase, use our built in styles or go unstyled. You choose." />
+	<meta name="description" content="A React component for rendering a 'npm install package-name' command block. Supports multiple package managers and themes. Drop it into your MDX code, a ShadCN UI component, a Tailwind codebase, use built-in styles or go unstyled. You choose." />
   `,
 };
 export default config;

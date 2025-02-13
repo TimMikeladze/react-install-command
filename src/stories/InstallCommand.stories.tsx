@@ -586,12 +586,7 @@ export const CustomStorageKey: Story = {
 export const WithScreenshotCapability: Story = {
 	render: () => (
 		<ComponentScreenshot>
-			<InstallCommand
-				packageName="react-install-command"
-				isDev={true}
-				version="^1.0.0"
-				theme="dark"
-			/>
+			<InstallCommand packageName="react-install-command" />
 		</ComponentScreenshot>
 	),
 	parameters: {

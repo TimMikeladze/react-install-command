@@ -1,10 +1,12 @@
 # 📡 React Install Command
 
-A React component for rendering a 'npm install <package name>' code block. Supports multiple package managers and variations of install commands. Totally customizable. Drop it into an MDX file, a Shadcn component, a Tailwind codebase, use our built in styles or even go unstyled. You choose.
+A React component for rendering a 'npm install package-name' code block. Supports multiple package managers and variations of install commands. Totally customizable. Drop it into an MDX file, a Shadcn component, a Tailwind codebase, use built-in styles or even go unstyled. You choose.
 
 Visit the [Storybook](https://react-install-command.vercel.app/) for examples and documentation.
 
-![React Command Block Demo](./docs/readme.png)
+![React Install Command Light](./docs/readme-light.png)
+
+![React Install Command Dark](./docs/readme-dark.png)
 
 ## Features
 
