@@ -11,9 +11,6 @@ importers:
 
   .:
     dependencies:
-      '@types/html2canvas':
-        specifier: ^1.0.0
-        version: 1.0.0
       html2canvas:
         specifier: ^1.4.1
         version: 1.4.1
@@ -54,6 +51,9 @@ importers:
       '@storybook/test':
         specifier: 8.4.7
         version: 8.4.7(storybook@8.4.7)
+      '@storybook/theming':
+        specifier: ^8.5.5
+        version: 8.5.5(storybook@8.4.7)
       '@testing-library/jest-dom':
         specifier: 6.6.3
         version: 6.6.3
@@ -102,6 +102,9 @@ importers:
       storybook:
         specifier: 8.4.7
         version: 8.4.7
+      storybook-dark-mode:
+        specifier: ^4.0.2
+        version: 4.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7)
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@swc/core@1.7.4)(@types/node@22.10.5)(typescript@5.7.2)
@@ -1280,6 +1283,11 @@ packages:
     peerDependencies:
       storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
 
+  '@storybook/core-events@8.5.5':
+    resolution: {integrity: sha512-QDquWLfIBIGfaEwHfwzMhvSntiIiWNkn7D6a6OWDcPXBWAfQcuMf5jX1ngysrJseefmPJQQ2dSQDSrtrYGDhTQ==}
+    peerDependencies:
+      storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
+
   '@storybook/core-webpack@8.4.7':
     resolution: {integrity: sha512-Tj+CjQLpFyBJxhhMms+vbPT3+gTRAiQlrhY3L1IEVwBa3wtRMS0qjozH26d1hK4G6mUIEdwu13L54HMU/w33Sg==}
     peerDependencies:
@@ -1385,6 +1393,11 @@ packages:
 
   '@storybook/theming@8.4.7':
     resolution: {integrity: sha512-99rgLEjf7iwfSEmdqlHkSG3AyLcK0sfExcr0jnc6rLiAkBhzuIsvcHjjUwkR210SOCgXqBPW0ZA6uhnuyppHLw==}
+    peerDependencies:
+      storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
+
+  '@storybook/theming@8.5.5':
+    resolution: {integrity: sha512-h/dsoA9RmWbIYjRNAVlJzjmrtLo5ZdNKEIZ0BDdpnuDhU3NEADtI4RrF4fwgoiA4ZNNUod0agvjUtzwgV1VF2Q==}
     peerDependencies:
       storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
 
@@ -1543,10 +1556,6 @@ packages:
 
   '@types/html-minifier-terser@6.1.0':
     resolution: {integrity: sha512-oh/6byDPnL1zeNXFrDXFLyZjkr1MsBG667IM792caf1L2UPOOMf65NFzjUH/ltyfwjAGfs1rsX1eftK0jC/KIg==}
-
-  '@types/html2canvas@1.0.0':
-    resolution: {integrity: sha512-BJpVf+FIN9UERmzhbtUgpXj6XBZpG67FMgBLLoj9HZKd9XifcCpSV+UnFcwTZfEyun4U/KmCrrVOG7829L589w==}
-    deprecated: This is a stub types definition. html2canvas provides its own type definitions, so you do not need this installed.
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -3919,6 +3928,9 @@ packages:
     resolution: {integrity: sha512-UhDfHmA92YAlNnCfhmq0VeNL5bDbiZGg7sZ2IvPsXubGkiNa9EC+tUTsjBRsYUAz87btI6/1wf4XoVvQ3uRnmQ==}
     engines: {node: '>=18'}
 
+  storybook-dark-mode@4.0.2:
+    resolution: {integrity: sha512-zjcwwQ01R5t1VsakA6alc2JDIRVtavryW8J3E3eKLDIlAMcvsgtpxlelWkZs2cuNspk6Z10XzhQVrUWtYc3F0w==}
+
   storybook@8.4.7:
     resolution: {integrity: sha512-RP/nMJxiWyFc8EVMH5gp20ID032Wvk+Yr3lmKidoegto5Iy+2dVQnUoElZb2zpbVXNHWakGuAkfI0dY1Hfp/vw==}
     hasBin: true
@@ -5417,6 +5429,10 @@ snapshots:
     dependencies:
       storybook: 8.4.7
 
+  '@storybook/core-events@8.5.5(storybook@8.4.7)':
+    dependencies:
+      storybook: 8.4.7
+
   '@storybook/core-webpack@8.4.7(storybook@8.4.7)':
     dependencies:
       '@types/node': 22.10.5
@@ -5566,6 +5582,10 @@ snapshots:
       storybook: 8.4.7
 
   '@storybook/theming@8.4.7(storybook@8.4.7)':
+    dependencies:
+      storybook: 8.4.7
+
+  '@storybook/theming@8.5.5(storybook@8.4.7)':
     dependencies:
       storybook: 8.4.7
 
@@ -5719,10 +5739,6 @@ snapshots:
   '@types/estree@1.0.6': {}
 
   '@types/html-minifier-terser@6.1.0': {}
-
-  '@types/html2canvas@1.0.0':
-    dependencies:
-      html2canvas: 1.4.1
 
   '@types/json-schema@7.0.15': {}
 
@@ -8247,6 +8263,21 @@ snapshots:
   std-env@3.8.0: {}
 
   stdin-discarder@0.2.2: {}
+
+  storybook-dark-mode@4.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7):
+    dependencies:
+      '@storybook/components': 8.4.7(storybook@8.4.7)
+      '@storybook/core-events': 8.5.5(storybook@8.4.7)
+      '@storybook/global': 5.0.0
+      '@storybook/icons': 1.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@storybook/manager-api': 8.4.7(storybook@8.4.7)
+      '@storybook/theming': 8.5.5(storybook@8.4.7)
+      fast-deep-equal: 3.1.3
+      memoizerific: 1.11.3
+    transitivePeerDependencies:
+      - react
+      - react-dom
+      - storybook
 
   storybook@8.4.7:
     dependencies:

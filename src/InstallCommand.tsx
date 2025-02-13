@@ -40,10 +40,15 @@ export interface CopyButtonSlotProps extends SlotProps {
 	onClick: () => void;
 }
 
+export interface TabIndicatorSlotProps extends SlotProps {
+	isSelected: boolean;
+}
+
 export interface Slots {
 	root?: (props: SlotProps) => ReactNode;
 	navigation?: (props: SlotProps) => ReactNode;
 	tab?: (props: TabSlotProps) => ReactNode;
+	tabIndicator?: (props: TabIndicatorSlotProps) => ReactNode;
 	commandContainer?: (props: SlotProps) => ReactNode;
 	commandPrefix?: (props: SlotProps) => ReactNode;
 	commandText?: (props: SlotProps) => ReactNode;
@@ -54,6 +59,7 @@ export interface SlotClassNames {
 	root?: string;
 	navigation?: string;
 	tab?: string;
+	tabIndicator?: string;
 	commandContainer?: string;
 	commandPrefix?: string;
 	commandText?: string;
@@ -293,25 +299,43 @@ export const defaultSlots = {
 			data-state={isSelected ? "active" : "default"}
 			className={cn("install-block-tab", className)}
 		>
-			{React.Children.map(children, (child) => {
-				if (React.isValidElement(child)) {
-					if (child.type === Icon) {
-						return React.cloneElement(child as React.ReactElement<IconProps>, {
-							className: cn(child.props.className, slotClassNames?.tabIcon),
-						});
+			<div className="install-block-tab-content">
+				{React.Children.map(children, (child) => {
+					if (React.isValidElement(child)) {
+						if (child.type === Icon) {
+							return React.cloneElement(
+								child as React.ReactElement<IconProps>,
+								{
+									className: cn(child.props.className, slotClassNames?.tabIcon),
+								},
+							);
+						}
+						if (child.type === "span") {
+							return React.cloneElement(
+								child as React.ReactElement<{ className?: string }>,
+								{
+									className: cn(child.props.className, slotClassNames?.tabText),
+								},
+							);
+						}
 					}
-					if (child.type === "span") {
-						return React.cloneElement(
-							child as React.ReactElement<{ className?: string }>,
-							{
-								className: cn(child.props.className, slotClassNames?.tabText),
-							},
-						);
-					}
-				}
-				return child;
-			})}
+					return child;
+				})}
+			</div>
+			<div
+				className={cn(
+					"install-block-tab-indicator",
+					slotClassNames?.tabIndicator,
+				)}
+				data-state={isSelected ? "active" : "default"}
+			/>
 		</button>
+	),
+	tabIndicator: ({ isSelected, className }: TabIndicatorSlotProps) => (
+		<div
+			className={cn("install-block-tab-indicator", className)}
+			data-state={isSelected ? "active" : "default"}
+		/>
 	),
 	commandContainer: ({ children, className }: SlotProps) => (
 		<div className={cn("install-block-content", className)}>{children}</div>
@@ -583,6 +607,7 @@ export const InstallCommand = ({
 		root: Root,
 		navigation: Navigation,
 		tab: Tab,
+		tabIndicator: TabIndicator,
 		commandContainer: CommandContainer,
 		commandPrefix: CommandPrefix,
 		commandText: CommandText,

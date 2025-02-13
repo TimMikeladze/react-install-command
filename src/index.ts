@@ -1,3 +1,13 @@
-export { default as InstallCommand } from "./InstallCommand";
-export type { InstallCommandProps } from "./InstallCommand";
-export { defaultManagers, type Manager, type Theme } from "./InstallCommand";
+export { InstallCommand } from "./InstallCommand";
+export type {
+	InstallCommandProps,
+	Manager,
+	Theme,
+	Slots,
+	SlotProps,
+	TabSlotProps,
+	CopyButtonSlotProps,
+	SlotClassNames,
+	StorageType,
+} from "./InstallCommand";
+export { defaultManagers, cn } from "./InstallCommand";

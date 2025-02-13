@@ -160,20 +160,6 @@ import { InstallCommand } from 'react-install-command';
 ### Customization
 
 ```tsx
-// Custom prefix and copy icon
-<InstallCommand
-  packageName="your-package"
-  commandPrefix="→"
-  copyIcon={() => (
-    <Icon
-      icon="lucide:clipboard-copy"
-      width={24}
-      height={24}
-      aria-label="Copy to clipboard"
-    />
-  )}
-/>
-
 // Custom class names
 <InstallCommand
   packageName="your-package"
@@ -181,6 +167,7 @@ import { InstallCommand } from 'react-install-command';
     root: "custom-root",
     navigation: "custom-nav",
     tab: "custom-tab",
+    tabIndicator: "install-block-tab-indicator-centered", // Centered indicator
     commandContainer: "custom-container",
     commandPrefix: "custom-prefix",
     commandText: "custom-text",
@@ -193,41 +180,70 @@ import { InstallCommand } from 'react-install-command';
   }}
 />
 
-// Full slot customization
+// Full customization with CSS classes
 <InstallCommand
   packageName="your-package"
-  slots={{
-    root: ({ children, className }) => (
-      <div className={className} style={{ border: "2px solid purple" }}>
-        {children}
-      </div>
-    ),
-    navigation: ({ children }) => (
-      <nav style={{ background: "#f0f0f0", padding: "8px" }}>{children}</nav>
-    ),
-    tab: ({ children, isSelected, onClick }) => (
-      <button
-        onClick={onClick}
-        style={{
-          background: isSelected ? "purple" : "transparent",
-          color: isSelected ? "white" : "black"
-        }}
-      >
-        {children}
-      </button>
-    ),
-    commandContainer: ({ children }) => (
-      <div style={{ padding: "16px", background: "#fafafa" }}>{children}</div>
-    ),
-    commandPrefix: () => <span style={{ color: "purple" }}>$</span>,
-    commandText: ({ children }) => (
-      <code style={{ color: "purple" }}>{children}</code>
-    ),
-    copyButton: ({ onClick }) => (
-      <button onClick={onClick} style={{ background: "purple", color: "white" }}>
-        Copy
-      </button>
-    )
+  slotClassNames={{
+    root: "border-2 border-purple-500 rounded-lg",
+    navigation: "bg-gray-100 p-2",
+    tab: "bg-transparent hover:bg-purple-50 text-black data-[state=active]:bg-purple-500 data-[state=active]:text-white px-2 py-1 mx-1 rounded",
+    tabIndicator: "install-block-tab-indicator-gradient", // Gradient indicator
+    commandContainer: "p-4 bg-gray-50",
+    commandPrefix: "text-purple-500",
+    commandText: "text-purple-500 font-mono",
+    copyButton: "bg-purple-500 text-white px-2 py-1 rounded border-0"
+  }}
+/>
+```
+
+### Built-in Indicator Variants
+
+The component comes with several built-in indicator variants that you can use:
+
+1. Default indicator (full width):
+```tsx
+<InstallCommand packageName="your-package" />
+```
+
+2. Centered indicator:
+```tsx
+<InstallCommand
+  packageName="your-package"
+  slotClassNames={{
+    tabIndicator: "install-block-tab-indicator-centered"
+  }}
+/>
+```
+
+3. Gradient indicator:
+```tsx
+<InstallCommand
+  packageName="your-package"
+  slotClassNames={{
+    tabIndicator: "install-block-tab-indicator-gradient"
+  }}
+/>
+```
+
+You can also create your own indicator styles by extending these classes or creating new ones in your CSS:
+
+```css
+.my-custom-indicator {
+  left: 15%;
+  width: 70%;
+  height: 3px;
+  border-radius: 1.5px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+```
+
+Then use it in your component:
+```tsx
+<InstallCommand
+  packageName="your-package"
+  slotClassNames={{
+    tabIndicator: "my-custom-indicator"
   }}
 />
 ```

@@ -3,7 +3,7 @@ import "../styles.css";
 import { Icon } from "@iconify/react";
 import type { Meta, StoryObj } from "@storybook/react";
 import type { ReactNode } from "react";
-import { InstallCommand, type Manager, defaultManagers } from "..";
+import { InstallCommand, type Manager, cn, defaultManagers } from "..";
 import { ComponentScreenshot } from "../ComponentScreenshot";
 
 // Define types for the manager options
@@ -415,61 +415,87 @@ export const EventHandlers: Story = {
 	},
 };
 
-// Full slots customization
-export const FullCustomSlots: Story = {
+// Custom indicator example
+export const CustomIndicator: Story = {
+	args: {
+		packageName,
+		slotClassNames: {
+			tabIndicator: "install-block-tab-indicator-centered",
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Customizing the tab indicator appearance using CSS classes.",
+			},
+		},
+	},
+};
+
+// Custom tab indicator with animation
+export const AnimatedTabIndicator: Story = {
+	args: {
+		packageName,
+		slotClassNames: {
+			tabIndicator: "install-block-tab-indicator-animated",
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"Tab indicator with smooth transition animation when switching tabs.",
+			},
+		},
+	},
+};
+
+// Custom tab indicator with border style
+export const BorderTabIndicator: Story = {
+	args: {
+		packageName,
+		slotClassNames: {
+			tabIndicator: "install-block-tab-indicator-border",
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Tab indicator using border style instead of background.",
+			},
+		},
+	},
+};
+
+// Custom tab indicator with dot style
+export const DotTabIndicator: Story = {
+	args: {
+		packageName,
+		slotClassNames: {
+			tabIndicator: "install-block-tab-indicator-dot",
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Tab indicator using a dot style for a minimal look.",
+			},
+		},
+	},
+};
+
+// Custom tab indicator with custom slot
+export const CustomSlotTabIndicator: Story = {
 	args: {
 		packageName,
 		slots: {
-			root: ({ children, className }) => (
+			tabIndicator: ({ isSelected, className }) => (
 				<div
-					className={className}
-					style={{ border: "2px solid purple", borderRadius: "8px" }}
+					className={cn("install-block-tab-indicator-custom", className)}
+					data-state={isSelected ? "active" : "default"}
 				>
-					{children}
+					{isSelected && <span className="indicator-dot" />}
 				</div>
-			),
-			navigation: ({ children }) => (
-				<nav style={{ background: "#f0f0f0", padding: "8px" }}>{children}</nav>
-			),
-			tab: ({ children, isSelected, onClick }) => (
-				<button
-					type="button"
-					onClick={onClick}
-					style={{
-						background: isSelected ? "purple" : "transparent",
-						color: isSelected ? "white" : "black",
-						padding: "4px 8px",
-						margin: "0 4px",
-						border: "none",
-						borderRadius: "4px",
-					}}
-				>
-					{children}
-				</button>
-			),
-			commandContainer: ({ children }) => (
-				<div style={{ padding: "16px", background: "#fafafa" }}>{children}</div>
-			),
-			commandPrefix: () => <span style={{ color: "purple" }}>$</span>,
-			commandText: ({ children }) => (
-				<code style={{ color: "purple", fontFamily: "monospace" }}>
-					{children}
-				</code>
-			),
-			copyButton: ({ onClick }) => (
-				<button
-					type="button"
-					onClick={onClick}
-					style={{
-						background: "purple",
-						color: "white",
-						padding: "4px 8px",
-						borderRadius: "4px",
-						border: "none",
-					}}
-				>
-					Copy
-				</button>
 			),
 		},
 	},
@@ -477,7 +503,50 @@ export const FullCustomSlots: Story = {
 		docs: {
 			description: {
 				story:
-					"Complete customization of all available slots with custom styling and behavior.",
+					"Custom tab indicator implementation using a custom slot component.",
+			},
+		},
+	},
+};
+
+// Gradient indicator example
+export const GradientIndicator: Story = {
+	args: {
+		packageName,
+		slotClassNames: {
+			tabIndicator: "install-block-tab-indicator-gradient",
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Using a gradient indicator with CSS classes.",
+			},
+		},
+	},
+};
+
+// Update FullCustomSlots story
+export const FullCustomSlots: Story = {
+	args: {
+		packageName,
+		slotClassNames: {
+			root: "custom-root border-2 border-purple-500 rounded-lg",
+			navigation: "custom-nav bg-gray-100 p-2",
+			tab: "custom-tab bg-transparent hover:bg-purple-50 text-black data-[state=active]:bg-purple-500 data-[state=active]:text-white px-2 py-1 mx-1 rounded",
+			tabIndicator: "install-block-tab-indicator-gradient",
+			commandContainer: "custom-container p-4 bg-gray-50",
+			commandPrefix: "custom-prefix text-purple-500",
+			commandText: "custom-text text-purple-500 font-mono",
+			copyButton:
+				"custom-copy bg-purple-500 text-white px-2 py-1 rounded border-0",
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"Complete customization using CSS classes instead of inline styles.",
 			},
 		},
 	},
@@ -598,4 +667,74 @@ export const WithScreenshotCapability: Story = {
 		},
 	},
 };
-2;
+
+// Thick tab indicator
+export const ThickTabIndicator: Story = {
+	args: {
+		packageName,
+		slotClassNames: {
+			tabIndicator: "install-block-tab-indicator-thick",
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Tab indicator with increased thickness (4px).",
+			},
+		},
+	},
+};
+
+// Thicker tab indicator
+export const ThickerTabIndicator: Story = {
+	args: {
+		packageName,
+		slotClassNames: {
+			tabIndicator: "install-block-tab-indicator-thicker",
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"Tab indicator with more thickness (6px) and rounded top corners.",
+			},
+		},
+	},
+};
+
+// Thickest tab indicator
+export const ThickestTabIndicator: Story = {
+	args: {
+		packageName,
+		slotClassNames: {
+			tabIndicator: "install-block-tab-indicator-thickest",
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"Tab indicator with maximum thickness (8px) and rounded top corners.",
+			},
+		},
+	},
+};
+
+// Thick gradient tab indicator
+export const ThickGradientIndicator: Story = {
+	args: {
+		packageName,
+		slotClassNames: {
+			tabIndicator:
+				"install-block-tab-indicator-gradient install-block-tab-indicator-thick",
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Combining thick style with gradient effect.",
+			},
+		},
+	},
+};

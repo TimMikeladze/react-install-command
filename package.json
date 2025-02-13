@@ -95,6 +95,7 @@
 		"@storybook/react": "8.4.7",
 		"@storybook/react-webpack5": "8.4.7",
 		"@storybook/test": "8.4.7",
+		"@storybook/theming": "^8.5.5",
 		"@testing-library/jest-dom": "6.6.3",
 		"@testing-library/react": "16.1.0",
 		"@types/node": "22.10.5",
@@ -111,6 +112,7 @@
 		"react-test-renderer": "18.3.1",
 		"release-it": "17.11.0",
 		"storybook": "8.4.7",
+		"storybook-dark-mode": "^4.0.2",
 		"ts-node": "10.9.2",
 		"tsconfig-paths": "4.2.0",
 		"tsup": "8.3.5",
@@ -128,7 +130,6 @@
 		}
 	},
 	"dependencies": {
-		"@types/html2canvas": "^1.0.0",
 		"html2canvas": "^1.4.1"
 	}
 }
