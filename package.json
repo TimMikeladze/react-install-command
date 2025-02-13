@@ -1,7 +1,7 @@
 {
 	"name": "react-install-command",
 	"description": "A React component for rendering a 'npm install package-name' command block. Supports multiple package managers and themes. Drop it into your MDX code, a ShadCN UI component, a Tailwind codebase, use built-in styles or go unstyled. You choose.",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"author": "Tim Mikeladze <tim.mikeladze@gmail.com>",
 	"license": "MIT",
 	"keywords": [
