@@ -1,6 +1,7 @@
 "use client";
 
 import { Icon } from "@iconify/react";
+import React from "react";
 import { useCallback, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
@@ -49,7 +50,30 @@ export interface Slots {
 	copyButton?: (props: CopyButtonSlotProps) => ReactNode;
 }
 
-export const cn = (...classes: string[]) => {
+export interface SlotClassNames {
+	root?: string;
+	navigation?: string;
+	tab?: string;
+	commandContainer?: string;
+	commandPrefix?: string;
+	commandText?: string;
+	copyButton?: string;
+	tabIcon?: string;
+	tabText?: string;
+	commandGroup?: string;
+	commandTextCommand?: string;
+	copyButtonIcon?: string;
+}
+
+export interface IconProps {
+	icon: string;
+	width?: number;
+	height?: number;
+	className?: string;
+	"aria-label"?: string;
+}
+
+export const cn = (...classes: (string | undefined)[]) => {
 	return classes.filter(Boolean).join(" ");
 };
 
@@ -251,38 +275,70 @@ export const defaultManagers: Manager[] = [
 
 export const defaultSlots = {
 	root: ({ children, className }: SlotProps) => (
-		<div className={cn("install-block", className || "")}>{children}</div>
+		<div className={cn("install-block", className)}>{children}</div>
 	),
 	navigation: ({ children, className }: SlotProps) => (
-		<div className={cn("install-block-nav", className || "")}>{children}</div>
+		<div className={cn("install-block-nav", className)}>{children}</div>
 	),
-	tab: ({ children, isSelected, onClick, className }: TabSlotProps) => (
+	tab: ({
+		children,
+		isSelected,
+		onClick,
+		className,
+		slotClassNames,
+	}: TabSlotProps & { slotClassNames?: SlotClassNames }) => (
 		<button
 			type="button"
 			onClick={onClick}
 			data-state={isSelected ? "active" : "default"}
-			className={cn("install-block-tab", className || "")}
+			className={cn("install-block-tab", className)}
 		>
-			{children}
+			{React.Children.map(children, (child) => {
+				if (React.isValidElement(child)) {
+					if (child.type === Icon) {
+						return React.cloneElement(child as React.ReactElement<IconProps>, {
+							className: cn(child.props.className, slotClassNames?.tabIcon),
+						});
+					}
+					if (child.type === "span") {
+						return React.cloneElement(
+							child as React.ReactElement<{ className?: string }>,
+							{
+								className: cn(child.props.className, slotClassNames?.tabText),
+							},
+						);
+					}
+				}
+				return child;
+			})}
 		</button>
 	),
 	commandContainer: ({ children, className }: SlotProps) => (
-		<div className={cn("install-block-content", className || "")}>
-			{children}
-		</div>
+		<div className={cn("install-block-content", className)}>{children}</div>
 	),
 	commandPrefix: ({ className }: SlotProps) => (
-		<span className={cn("install-block-prefix", className || "")}>$</span>
+		<span className={cn("install-block-prefix", className)}>$</span>
 	),
-	commandText: ({ children, className }: SlotProps) => {
+	commandText: ({
+		children,
+		className,
+		slotClassNames,
+	}: SlotProps & { slotClassNames?: SlotClassNames }) => {
 		const text = String(children);
 		const parts = text.split(/\s+/);
 		const command = parts[0];
 		const rest = parts.slice(1).join(" ");
 
 		return (
-			<code className={cn("install-block-text", className || "")}>
-				<span className={cn("install-block-text-command")}>{command}</span>
+			<code className={cn("install-block-text", className)}>
+				<span
+					className={cn(
+						"install-block-text-command",
+						slotClassNames?.commandTextCommand || "",
+					)}
+				>
+					{command}
+				</span>
 				{rest ? ` ${rest}` : ""}
 			</code>
 		);
@@ -291,13 +347,15 @@ export const defaultSlots = {
 		<button
 			type="button"
 			onClick={onClick}
-			className={cn("install-block-copy", className || "")}
+			className={cn("install-block-copy", className)}
 			aria-label="Copy command"
 		>
 			{defaultCopyIcon()}
 		</button>
 	),
 };
+
+export type StorageType = "local" | "session" | "none";
 
 export interface InstallCommandProps {
 	/**
@@ -368,17 +426,9 @@ export interface InstallCommandProps {
 	slots?: Slots;
 
 	/**
-	 * Custom classNames for each slot
+	 * Custom classNames for each slot and nested elements
 	 */
-	slotClassNames?: {
-		root?: string;
-		navigation?: string;
-		tab?: string;
-		commandContainer?: string;
-		commandPrefix?: string;
-		commandText?: string;
-		copyButton?: string;
-	};
+	slotClassNames?: SlotClassNames;
 
 	/**
 	 * Callback fired when the command is copied
@@ -417,6 +467,18 @@ export interface InstallCommandProps {
 	 * @default "$"
 	 */
 	commandPrefix?: string;
+
+	/**
+	 * Storage type for persisting package manager selection
+	 * @default "none"
+	 */
+	storageType?: StorageType;
+
+	/**
+	 * Storage key for persisting package manager selection
+	 * @default "preferred-package-manager"
+	 */
+	storageKey?: string;
 }
 
 export const InstallCommand = ({
@@ -439,11 +501,22 @@ export const InstallCommand = ({
 	copyIcon = defaultCopyIcon,
 	classNameFn = cn,
 	commandPrefix = "$",
+	storageType = "none",
+	storageKey = "preferred-package-manager",
 }: InstallCommandProps) => {
-	// Detect initial manager based on command
+	// Detect initial manager based on command and storage
 	const detectInitialManager = useCallback(() => {
+		// Try to get from storage first if enabled
+		if (storageType !== "none") {
+			const storage = storageType === "local" ? localStorage : sessionStorage;
+			const stored = storage.getItem(storageKey);
+			if (stored && managers.some((m) => m.id === stored)) {
+				return stored;
+			}
+		}
+
 		if (customCommands) {
-			// Try to detect from custom commands first
+			// Try to detect from custom commands
 			for (const [managerId] of Object.entries(customCommands)) {
 				const manager = managers.find((m) => m.id === managerId);
 				if (manager) {
@@ -470,11 +543,26 @@ export const InstallCommand = ({
 
 		// Default to first available manager if no detection possible
 		return managers[0]?.id;
-	}, [customCommands, packageName, registry, managers]);
+	}, [
+		customCommands,
+		packageName,
+		registry,
+		managers,
+		storageType,
+		storageKey,
+	]);
 
 	const [selectedManager, setSelectedManager] = useState(
 		detectInitialManager(),
 	);
+
+	// Update storage when selection changes
+	useEffect(() => {
+		if (storageType !== "none") {
+			const storage = storageType === "local" ? localStorage : sessionStorage;
+			storage.setItem(storageKey, selectedManager);
+		}
+	}, [selectedManager, storageType, storageKey]);
 
 	useEffect(() => {
 		const root = document.documentElement;
@@ -563,6 +651,7 @@ export const InstallCommand = ({
 							"install-block-tab",
 							slotClassNames.tab || "",
 						)}
+						slotClassNames={slotClassNames}
 					>
 						{manager.icon()}
 						<span>{manager.name}</span>
@@ -576,7 +665,12 @@ export const InstallCommand = ({
 					slotClassNames.commandContainer || "",
 				)}
 			>
-				<div className="install-block-group">
+				<div
+					className={cn(
+						"install-block-group",
+						slotClassNames.commandGroup || "",
+					)}
+				>
 					<CommandPrefix
 						className={classNameFn(
 							"install-block-prefix",
@@ -590,6 +684,7 @@ export const InstallCommand = ({
 							"install-block-text",
 							slotClassNames.commandText || "",
 						)}
+						slotClassNames={slotClassNames}
 					>
 						{currentCommand}
 					</CommandText>
@@ -601,7 +696,12 @@ export const InstallCommand = ({
 					)}
 					onClick={handleCopy}
 				>
-					{copyIcon()}
+					{React.cloneElement(copyIcon() as React.ReactElement<IconProps>, {
+						className: cn(
+							copyIcon().props.className,
+							slotClassNames.copyButtonIcon || "",
+						),
+					})}
 				</CopyButton>
 			</CommandContainer>
 		</Root>

@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 import type { Meta, StoryObj } from "@storybook/react";
 import type { ReactNode } from "react";
 import { InstallCommand, type Manager, defaultManagers } from "..";
+import { ComponentScreenshot } from "../ComponentScreenshot";
 
 // Define types for the manager options
 interface ManagerOptions {
@@ -59,6 +60,16 @@ const meta = {
 			control: "select",
 			options: ["npm", "jsr"],
 			description: "Package registry to use (for Deno packages)",
+		},
+		storageType: {
+			control: "select",
+			options: ["local", "session", "none"],
+			description: "Storage type for persisting package manager selection",
+			defaultValue: "none",
+		},
+		storageKey: {
+			control: "text",
+			description: "Storage key for persisting package manager selection",
 		},
 	},
 } satisfies Meta<typeof InstallCommand>;
@@ -524,3 +535,72 @@ export const CombinedFeatures: Story = {
 		},
 	},
 };
+
+// Storage persistence examples
+export const LocalStorage: Story = {
+	args: {
+		packageName,
+		storageType: "local",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"Persists package manager selection in localStorage (survives browser restarts).",
+			},
+		},
+	},
+};
+
+export const SessionStorage: Story = {
+	args: {
+		packageName,
+		storageType: "session",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"Persists package manager selection in sessionStorage (cleared when browser closes).",
+			},
+		},
+	},
+};
+
+export const CustomStorageKey: Story = {
+	args: {
+		packageName,
+		storageType: "local",
+		storageKey: "my-custom-pm-key",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Using a custom storage key for persistence.",
+			},
+		},
+	},
+};
+
+// Screenshot example story
+export const WithScreenshotCapability: Story = {
+	render: () => (
+		<ComponentScreenshot>
+			<InstallCommand
+				packageName="react-install-command"
+				isDev={true}
+				version="^1.0.0"
+				theme="dark"
+			/>
+		</ComponentScreenshot>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"Component with screenshot capability - click the camera button to download a PNG of the component.",
+			},
+		},
+	},
+};
+2;

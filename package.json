@@ -127,5 +127,8 @@
 			"micromatch@<4.0.8": ">=4.0.8"
 		}
 	},
-	"dependencies": {}
+	"dependencies": {
+		"@types/html2canvas": "^1.0.0",
+		"html2canvas": "^1.4.1"
+	}
 }
