@@ -10,4 +10,4 @@ export type {
 	SlotClassNames,
 	StorageType,
 } from "./InstallCommand";
-export { defaultManagers, cn } from "./InstallCommand";
+export { javascriptManagers, pythonManagers, cn } from "./InstallCommand";

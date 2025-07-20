@@ -3,7 +3,13 @@ import "../styles.css";
 import { Icon } from "@iconify/react";
 import type { Meta, StoryObj } from "@storybook/react";
 import type { ReactNode } from "react";
-import { InstallCommand, type Manager, cn, defaultManagers } from "..";
+import {
+	InstallCommand,
+	type Manager,
+	cn,
+	javascriptManagers,
+	pythonManagers,
+} from "..";
 import { ComponentScreenshot } from "../ComponentScreenshot";
 
 // Define types for the manager options
@@ -15,7 +21,7 @@ interface ManagerOptions {
 	useShorthand?: boolean;
 	version?: string;
 	tag?: string;
-	registry?: "npm" | "jsr";
+	registry?: "npm" | "jsr" | "pypi";
 }
 
 // Define types for slot props
@@ -142,6 +148,13 @@ export const SpecificTag: Story = {
 	},
 };
 
+export const PythonInstall: Story = {
+	args: {
+		packageName,
+		managers: pythonManagers,
+	},
+};
+
 // Complex installation example
 export const ComplexInstallation: Story = {
 	args: {
@@ -164,9 +177,9 @@ export const CustomDefaultManager: Story = {
 	args: {
 		packageName: "react",
 		managers: [
-			defaultManagers[2], // pnpm
-			defaultManagers[0], // npm
-			defaultManagers[1], // yarn
+			javascriptManagers[2], // pnpm
+			javascriptManagers[0], // npm
+			javascriptManagers[1], // yarn
 		],
 	},
 	parameters: {
@@ -293,7 +306,7 @@ export const DenoNpmPackage: Story = {
 	args: {
 		packageName: "react",
 		registry: "npm",
-		managers: [defaultManagers[4]], // Only Deno manager
+		managers: [javascriptManagers[4]], // Only Deno manager
 	},
 	parameters: {
 		docs: {

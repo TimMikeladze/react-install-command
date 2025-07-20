@@ -21,7 +21,7 @@ export interface Manager {
 			useShorthand?: boolean;
 			version?: string;
 			tag?: string;
-			registry?: "npm" | "jsr";
+			registry?: "npm" | "jsr" | "pypi";
 		},
 	) => string;
 }
@@ -92,7 +92,7 @@ export const defaultCopyIcon = () => (
 	/>
 );
 
-export const defaultManagers: Manager[] = [
+export const javascriptManagers: Manager[] = [
 	{
 		id: "npm",
 		name: "npm",
@@ -189,11 +189,12 @@ export const defaultManagers: Manager[] = [
 				tag,
 			} = options;
 
+			const command = useShorthand ? "i" : "install";
 			const flags = [
+				isDev && (useShorthand ? "-D" : "--save-dev"),
+				isPeer && "--save-peer",
+				isOptional && "--save-optional",
 				isGlobal && "-g",
-				isDev && "-D",
-				isPeer && "-P",
-				isOptional && "-O",
 			]
 				.filter(Boolean)
 				.join(" ");
@@ -204,7 +205,7 @@ export const defaultManagers: Manager[] = [
 					? `${pkg}@${tag}`
 					: pkg;
 
-			return `pnpm add${flags ? ` ${flags}` : ""} ${pkgWithVersion}`;
+			return `pnpm ${command}${flags ? ` ${flags}` : ""} ${pkgWithVersion}`;
 		},
 	},
 	{
@@ -219,13 +220,22 @@ export const defaultManagers: Manager[] = [
 			/>
 		),
 		getCommand: (pkg: string, options) => {
-			const { isDev, isPeer, isOptional, isGlobal, version, tag } = options;
+			const {
+				isDev,
+				isPeer,
+				isOptional,
+				isGlobal,
+				useShorthand,
+				version,
+				tag,
+			} = options;
 
+			const command = useShorthand ? "i" : "install";
 			const flags = [
-				isGlobal && "-g",
-				isDev && "-d",
+				isDev && (useShorthand ? "-d" : "--dev"),
 				isPeer && "--peer",
 				isOptional && "--optional",
+				isGlobal && "-g",
 			]
 				.filter(Boolean)
 				.join(" ");
@@ -236,7 +246,7 @@ export const defaultManagers: Manager[] = [
 					? `${pkg}@${tag}`
 					: pkg;
 
-			return `bun add${flags ? ` ${flags}` : ""} ${pkgWithVersion}`;
+			return `bun ${command}${flags ? ` ${flags}` : ""} ${pkgWithVersion}`;
 		},
 	},
 	{
@@ -275,6 +285,59 @@ export const defaultManagers: Manager[] = [
 			});
 
 			return `deno add ${packagesWithVersion.join(" ")}`;
+		},
+	},
+];
+
+export const pythonManagers: Manager[] = [
+	{
+		id: "uv",
+		name: "uv",
+		icon: () => (
+			<Icon
+				icon="catppuccin:uv"
+				width={24}
+				height={24}
+				aria-label="uv package manager"
+			/>
+		),
+		getCommand: (pkg: string, options) => {
+			const { isDev, isGlobal, version, tag } = options;
+
+			const flags = [isDev && "--dev"].filter(Boolean).join(" ");
+
+			const pkgWithVersion = version
+				? `${pkg}==${version}`
+				: tag
+					? `${pkg}@${tag}`
+					: pkg;
+
+			return `uv add${flags ? ` ${flags}` : ""} ${pkgWithVersion}`;
+		},
+	},
+	{
+		id: "pip",
+		name: "pip",
+		icon: () => (
+			<Icon
+				icon="logos:python"
+				width={24}
+				height={24}
+				aria-label="pip package manager"
+			/>
+		),
+		getCommand: (pkg: string, options) => {
+			const { isDev, isGlobal, version, tag } = options;
+
+			const flags = [].filter(Boolean).join(" ");
+
+			const pkgWithVersion = version
+				? `${pkg}==${version}`
+				: tag
+					? `${pkg}@${tag}`
+					: pkg;
+
+			return `pip install${flags ? ` ${flags}` : ""} ${pkgWithVersion}`;
 		},
 	},
 ];
@@ -431,11 +494,11 @@ export interface InstallCommandProps {
 	 * Package registry to use (for Deno packages)
 	 * @default undefined
 	 */
-	registry?: "npm" | "jsr";
+	registry?: "npm" | "jsr" | "pypi";
 
 	/**
 	 * Array of package managers to display
-	 * @default defaultManagers
+	 * @default javascriptManagers
 	 */
 	managers?: Manager[];
 
@@ -515,7 +578,7 @@ export const InstallCommand = ({
 	version,
 	tag,
 	registry,
-	managers = defaultManagers,
+	managers = javascriptManagers,
 	customCommands,
 	slots = {},
 	slotClassNames = {},

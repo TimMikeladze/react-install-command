@@ -10,7 +10,7 @@ Visit the [Storybook](https://react-install-command.vercel.app/) for examples an
 
 ## Features
 
-- 🚀 Support for major package managers (npm, Yarn, pnpm, Bun, Deno).
+- 🚀 Support for major package managers (npm, Yarn, pnpm, Bun, Deno, uv, pip).
 - 🌓 Dark, light and system theme support out of the box.
 - 🔄 Interactive tab switching between package managers.
 - 📋 One-click copy to clipboard.
@@ -78,12 +78,50 @@ import { InstallCommand } from 'react-install-command';
 <InstallCommand 
   packageName="react" 
   registry="npm"
-  managers={[defaultManagers[4]]} // Only Deno manager
+  managers={[javascriptManagers[4]]} // Only Deno manager
 />
 
 // Mixed registry packages
 <InstallCommand 
   packageName="jsr:@std/path jsr:@std/assert npm:chalk" 
+/>
+```
+
+### Python Package Managers
+
+```tsx
+// Using Python managers (uv, pip)
+<InstallCommand 
+  packageName="requests" 
+  managers={pythonManagers}
+/>
+
+// Python dev dependency
+<InstallCommand 
+  packageName="pytest" 
+  managers={pythonManagers}
+  isDev 
+/>
+
+// Python package with version
+<InstallCommand 
+  packageName="django" 
+  managers={pythonManagers}
+  version="4.2.0" 
+/>
+
+// Python package with tag
+<InstallCommand 
+  packageName="fastapi" 
+  managers={pythonManagers}
+  tag="latest" 
+/>
+
+// Python global installation
+<InstallCommand 
+  packageName="black" 
+  managers={pythonManagers}
+  isGlobal 
 />
 ```
 
@@ -138,9 +176,24 @@ import { InstallCommand } from 'react-install-command';
 <InstallCommand
   packageName="react"
   managers={[
-    defaultManagers[2], // pnpm first
-    defaultManagers[0], // npm second
-    defaultManagers[1], // yarn third
+    javascriptManagers[2], // pnpm first
+    javascriptManagers[0], // npm second
+    javascriptManagers[1], // yarn third
+  ]}
+/>
+
+// Using Python managers
+<InstallCommand
+  packageName="requests"
+  managers={pythonManagers}
+/>
+
+// Mixed JavaScript and Python managers
+<InstallCommand
+  packageName="react"
+  managers={[
+    ...javascriptManagers.slice(0, 2), // npm, yarn
+    ...pythonManagers // uv, pip
   ]}
 />
 ```
@@ -327,7 +380,7 @@ Then use it in your component:
 | tag | string | undefined | Tag for the package |
 | registry | "npm" \| "jsr" | undefined | Package registry to use (for Deno packages) |
 | theme | "light" \| "dark" \| "system" | "system" | The color theme to use |
-| managers | Manager[] | defaultManagers | Array of package managers to display |
+| managers | Manager[] | javascriptManagers | Array of package managers to display |
 | customCommands | Record<string, string> | undefined | Custom commands to override the defaults |
 | slots | Slots | {} | Custom slot components for rendering |
 | slotClassNames | SlotClassNames | {} | Custom classNames for each slot |
@@ -361,6 +414,31 @@ interface Manager {
     }
   ) => string;
 }
+```
+
+### Available Package Managers
+
+The component provides pre-configured manager arrays:
+
+- `javascriptManagers`: npm, Yarn, pnpm, Bun, Deno
+- `pythonManagers`: uv, pip
+
+You can import these arrays:
+
+```tsx
+import { javascriptManagers, pythonManagers } from 'react-install-command';
+
+// Use JavaScript managers (default)
+<InstallCommand packageName="react" managers={javascriptManagers} />
+
+// Use Python managers
+<InstallCommand packageName="requests" managers={pythonManagers} />
+
+// Mix managers
+<InstallCommand 
+  packageName="react" 
+  managers={[...javascriptManagers.slice(0, 2), ...pythonManagers]} 
+/>
 ```
 
 ### Slots
